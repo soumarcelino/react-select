@@ -62,12 +62,18 @@ export const optionCSS = ({
     backgroundColor: !isDisabled && (isSelected ? colors.primary : colors.primary50),
   },
 });
-
+let startTimeout;
 const Option = (props: OptionProps) => {
   const { children, className, cx, getStyles, isDisabled, isFocused, isSelected, innerRef, innerProps } = props;
   return (
     <div
       ref={innerRef}
+      id={innerProps.id}
+      onTouchStart={()=>{ clearTimeout(startTimeout); startTimeout = setTimeout(()=>{ innerProps.onClick(); }, 150);}}
+      onTouchMove={()=>{clearTimeout(startTimeout);}}
+      onMouseMove={innerProps.onMouseMove }
+      onMouseOver={innerProps.onMouseOver }
+      tabIndex={innerProps.tabIndex }
       className={cx(
         css(getStyles('option', props)),
         {
@@ -78,7 +84,6 @@ const Option = (props: OptionProps) => {
         },
         className
       )}
-      {...innerProps}
     >
       {children}
     </div>
